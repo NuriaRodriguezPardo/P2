@@ -1,8 +1,15 @@
-# Pràctica 2: interrupciones
-## A. Interrupción por GPIO
+# Pràctica 2.A: interrupción por GPIO
+## Objetivo: 
+- Comprender el funcionamiento de las interrupciones.
+- Adjuntar una interrupción a un PIN GPIO.
 
-**Código:**
+## Materiales: 
+- ESP32-S1
+- GPIO
+## Proceso: 
 
+**Codigo:**
+```cpp
     struct Button {
         const uint8_t PIN;
         uint32_t numberKeyPresses;
@@ -40,11 +47,31 @@
             Serial.println("Interrupt Detached!");
             }
     }
+```
+**Diagrama de flujos:**
+
+```mermaid
+graph LR
+    A[Inicio] --> B[Inicialización]
+    B --> C[Loop]
+    C --> D[Presionado?]
+    D -- Sí --> E[+ l pulsacion y escribir terminal]
+    E --> F[Restablecer estado]
+    F --> C
+    D -- No --> G[1 minuto?]
+    G -- Sí --> H[Desvincular]
+    H --> I[Mostrar mensaje]
+    I --> C
+    G -- No --> C
+```
+
 **Descripcion:**<br>
-Este programa cuenta las veces que ha habido una interrupción.<br>Primero hemos creado un "objeto", que llamamos "Button", esta estructura contiene los datos necesarios para saber si el boton se ha pulsado, un contador para saber quantas veces se ha pulsado y a la vez un PIN para diferenciarlo.<br>
+Primero hemos creado un "objeto", que llamamos "Button", esta estructura contiene los datos necesarios para saber si el boton se ha pulsado, un contador para saber quantas veces se ha pulsado y a la vez un PIN para diferenciarlo.<br>
 A continuación hemos creado una instancia (ejemplar de la estructura inicializado a unos valores especificos) de la estructura "Button" y creado una funcion que solo se ejecutará cuando se produzca una interrupción incrementando el contador y cambiando el estado del booleano tambien creado en la estructura.<br>Con la configuración inicial hemos inicializado la comunicación serial para la depuración, hemos configurado el pin del botón como entrada con el pull-up interno y adjuntado la función de interrupción al pin del botón.<br>
 Por último, hemos creado un bucle que se encarga de comprobar si el botón ha sido presionado, es decir, si ha habido una interrupción. Si es asi, imprime el numero de pulsaciones en el puerto de serie con un mensaje y luego estableze el estado del boton nuevamente a no presionado. En el caso de estar un minuto sin ninguna interrupción, se desvincula la interrupción del pin del botón i acaba el programa.<br>
-En conclusión, este código nos permite contar el numero de veces que creamos una interrupción, (en nuestro caso juntamos los dos cables) y lo imprime por el puerto serie, pero despues de un minuro deja de contar acabando el programa.
+## Conclusión: 
+En conclusión, este código nos permite contar el numero de veces que creamos una interrupción, (en nuestro caso juntamos los dos cables) y lo imprime por el puerto serie, pero despues de un minuto deja de contar acabando el programa.
+
 
 
 
